@@ -1,28 +1,45 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:to_do/dbHealper/Database.dart';
 import 'package:to_do/utils/DialogBox.dart';
 import 'package:to_do/utils/ToDoTile.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
 
+
   final _controller=TextEditingController();
 
+  final _mybox=Hive.box('todobox');
+  ToDoDatabase db=new ToDoDatabase();
+
+  @override
+  void initState() {
+
+    //If app is opening 1st time then sample data added thorugh intidb fun
+    if(_mybox.get("TASKLIST") == null){
+      db.createInitialDatabase();
+    }else{
+      db.loadDatabase();
+    }
+
+    super.initState();
+  }
 
 
-  List taskList = [
-    ["1st Task", true],
-    ["2nd Task", false],
-  ];
+
 
   void chekBoxChanged(bool? value, int index) {
     setState(() {
-      taskList[index][1] = !taskList[index][1];
+      db.taskList[index][1] = !db.taskList[index][1];
+      db.updateDatabase();
     });
   }
 
@@ -30,9 +47,12 @@ class _HomePageState extends State<HomePage> {
   void addTaskBtnFun(){
     setState(() {
       if(_controller.text.isNotEmpty){
-      taskList.add([_controller.text,false]);
-      Navigator.of(context).pop;
+        db.taskList.add([_controller.text,false]);
       _controller.clear();
+      Navigator.of(context).pop();
+      db.updateDatabase();
+
+
       }
 
     });
@@ -50,6 +70,14 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void deleteTaskBtnFun(int index){
+    setState(() {
+      db.taskList.removeAt(index);
+      db.updateDatabase();
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,12 +90,13 @@ class _HomePageState extends State<HomePage> {
       body: ListView.builder(
         itemBuilder: (context, index) {
           return ToDoTile(
-            task: taskList[index][0],
-            taskCompleted: taskList[index][1],
+            task: db.taskList[index][0],
+            taskCompleted: db.taskList[index][1],
             onChanged: (value) => chekBoxChanged(value, index),
+            deleteTaskBtn: (context) => deleteTaskBtnFun(index),
           );
         },
-        itemCount: taskList.length,
+        itemCount: db.taskList.length,
       ),
     );
   }

@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 
 import 'pages/HomePage.dart';
 
-void main() {
+void main() async {
+  //init Hive
+  await Hive.initFlutter();
+  var hiveBox=await Hive.openBox('todobox');
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+
   const MyApp({super.key});
 
   // This widget is the root of your application.
