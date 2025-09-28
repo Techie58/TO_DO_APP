@@ -41,6 +41,7 @@ class DialogBox extends StatelessWidget {
             TextField(
               controller: controller,
               decoration: InputDecoration(
+                focusColor: Colors.red,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(70)),
                 ),
@@ -49,9 +50,12 @@ class DialogBox extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: addTaskBtnFun,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.yellow[200]
+              ),
               child: Text(
                 '     Add     ',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20,color: Colors.black),
               ),
             ),
           ],
