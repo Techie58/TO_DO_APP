@@ -1,12 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class ToDoTile extends StatelessWidget{
+class ToDoTile extends StatelessWidget {
   final String task;
   final bool taskCompleted;
   Function(bool?)? onChanged;
-  Function (BuildContext)? deleteTaskBtn;
+  Function(BuildContext)? deleteTaskBtn;
 
   ToDoTile({
     super.key,
@@ -14,31 +13,37 @@ class ToDoTile extends StatelessWidget{
     required this.taskCompleted,
     required this.onChanged,
     required this.deleteTaskBtn,
-});
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 25,right: 25,top: 25),
+      padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
       child: Slidable(
-        startActionPane: ActionPane(motion: DrawerMotion(), children: [
-          SlidableAction(onPressed: (context) => {},
-            backgroundColor: Colors.green,
-            icon: Icons.alarm_add,
-            label: 'Set Alaram',
-            borderRadius: BorderRadius.circular(12),
-          )
-        ]),
-        endActionPane: ActionPane(motion: BehindMotion(), children: [
-          SlidableAction(onPressed: deleteTaskBtn,
-            backgroundColor: Colors.red,
-            icon: Icons.delete_forever,
-            label: 'Delete',
-            borderRadius: BorderRadius.circular(12),
-
-          )
-
-        ]),
+        startActionPane: ActionPane(
+          motion: DrawerMotion(),
+          children: [
+            SlidableAction(
+              onPressed: (context) => {},
+              backgroundColor: Colors.green,
+              icon: Icons.alarm_add,
+              label: 'Set Alaram',
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ],
+        ),
+        endActionPane: ActionPane(
+          motion: BehindMotion(),
+          children: [
+            SlidableAction(
+              onPressed: deleteTaskBtn,
+              backgroundColor: Colors.red,
+              icon: Icons.delete_forever,
+              label: 'Delete',
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ],
+        ),
         child: Container(
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -49,14 +54,17 @@ class ToDoTile extends StatelessWidget{
             children: [
               Checkbox(value: taskCompleted, onChanged: onChanged),
               Text(
-                  task,
-                  style: TextStyle(decoration: taskCompleted ? TextDecoration.lineThrough : TextDecoration.none,),)
+                task,
+                style: TextStyle(
+                  decoration: taskCompleted
+                      ? TextDecoration.lineThrough
+                      : TextDecoration.none,
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
   }
-
-
 }
